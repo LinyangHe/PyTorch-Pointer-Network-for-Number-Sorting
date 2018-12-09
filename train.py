@@ -68,7 +68,7 @@ data_loader = Data.DataLoader(
 
 
 #Define the Model
-model = PointerNetwork(INPUT_SIZE, WEIGHT_SIZE, HIDDEN_SIZE, is_GRU=False)
+model = PointerNetwork(INPUT_SIZE, HIDDEN_SIZE, WEIGHT_SIZE, is_GRU=False)
 if torch.cuda.is_available():
     model.cuda()
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)

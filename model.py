@@ -8,11 +8,11 @@ def to_cuda(x):
     return x
 
 class PointerNetwork(nn.Module):
-    def __init__(self, input_size, weight_size, hidden_size, is_GRU=False):
+    def __init__(self, input_size, hidden_size, weight_size, is_GRU=False):
         super().__init__()
         self.input_size = input_size
-        self.weight_size = weight_size
         self.hidden_size = hidden_size
+        self.weight_size = weight_size
         self.is_GRU = is_GRU
 
         if self.is_GRU:
