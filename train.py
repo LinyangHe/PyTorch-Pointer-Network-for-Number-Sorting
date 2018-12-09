@@ -18,24 +18,24 @@ def to_cuda(x):
         return x.cuda()
     return x
 
-def getdata(shiyan=1, data_size):
-    if shiyan == 1:
+def getdata(experiment=1, data_size):
+    if experiment == 1:
         high = 100
         senlen = 5
         x = np.array([np.random.choice(range(high), senlen, replace=False)
                       for _ in range(data_size)])
         y = np.argsort(x)
-    elif shiyan == 2:
+    elif experiment == 2:
         high = 100
         senlen = 10
         x = np.array([np.random.choice(range(high), senlen, replace=False)
                       for _ in range(data_size)])
         y = np.argsort(x)
-    elif shiyan == 3:
+    elif experiment == 3:
         senlen = 5
         x = np.array([np.random.random(senlen) for _ in range(data_size)])
         y = np.argsort(x)
-    elif shiyan == 4:
+    elif experiment == 4:
         senlen = 10
         x = np.array([np.random.random(senlen) for _ in range(data_size)])
         y = np.argsort(x)
@@ -49,7 +49,7 @@ def evaluate(model, X, Y):
     print('Acc: {:.2f}%'.format(accuracy*100))
 
 #Get Dataset
-x, y = getdata(shiyan=2, data_size = DATA_SIZE)
+x, y = getdata(experiment=2, data_size = DATA_SIZE)
 x = to_cuda(torch.FloatTensor(x).unsqueeze(2))     
 y = to_cuda(torch.LongTensor(y)) 
 #Split Dataset
