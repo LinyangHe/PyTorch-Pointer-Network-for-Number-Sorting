@@ -34,11 +34,10 @@ class PointerNetwork(nn.Module):
         batch_size = input.shape[0]
         decoder_seq_len = input.shape[1]
 
-        # Encoding
         encoder_output, hc = self.encoder(input) 
 
         # Decoding states initialization
-        hidden = encoder_output[:, -1, :] #hidden state for decoder is last timestep's output of encoder 
+        hidden = encoder_output[:, -1, :] #hidden state for decoder is the last timestep's output of encoder 
         if not self.is_GRU: #For LSTM, cell state is the sencond state output
             cell = hc[1][-1, :, :]
         decoder_input = to_cuda(torch.rand(batch_size, self.input_size))  
