@@ -1,44 +1,43 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
+import torch
 import torch.utils.data as Data
 from model import PointerNetwork
 
+
+EPOCH = 500
+BATCH_SIZE = 250
+DATA_SIZE = 10000
+INPUT_SIZE = 1
+HIDDEN_SIZE = 512
+WEIGHT_SIZE = 256
 LR = 0.001
-EPOCH = 5
-batch_size = 250
-total_size = 10000
-input_size = 1
-weight_size = 256
-hidden_size = 512
+
 
 def to_cuda(x):
     if torch.cuda.is_available():
         return x.cuda()
-    else:
-        return x
+    return x
 
-def getdata(shiyan=1, batch_size=batch_size):
+def getdata(shiyan=1, data_size):
     if shiyan == 1:
         high = 100
         senlen = 5
         x = np.array([np.random.choice(range(high), senlen, replace=False)
-                      for _ in range(batch_size)])
+                      for _ in range(data_size)])
         y = np.argsort(x)
     elif shiyan == 2:
         high = 100
         senlen = 10
         x = np.array([np.random.choice(range(high), senlen, replace=False)
-                      for _ in range(batch_size)])
+                      for _ in range(data_size)])
         y = np.argsort(x)
     elif shiyan == 3:
         senlen = 5
-        x = np.array([np.random.random(senlen) for _ in range(batch_size)])
+        x = np.array([np.random.random(senlen) for _ in range(data_size)])
         y = np.argsort(x)
     elif shiyan == 4:
         senlen = 10
-        x = np.array([np.random.random(senlen) for _ in range(batch_size)])
+        x = np.array([np.random.random(senlen) for _ in range(data_size)])
         y = np.argsort(x)
     return x, y
 
@@ -50,11 +49,11 @@ def evaluate(model, X, Y):
     print('Acc: {:.2f}%'.format(accuracy*100))
 
 #Get Dataset
-x, y = getdata(shiyan=2, batch_size = total_size)
+x, y = getdata(shiyan=2, data_size = DATA_SIZE)
 x = to_cuda(torch.FloatTensor(x).unsqueeze(2))     
 y = to_cuda(torch.LongTensor(y)) 
 #Split Dataset
-train_size = (int)(total_size * 0.9)
+train_size = (int)(DATA_SIZE * 0.9)
 train_X = x[:train_size]
 train_Y = y[:train_size]
 test_X = x[train_size:]
@@ -63,13 +62,13 @@ test_Y = y[train_size:]
 train_data = Data.TensorDataset(train_X, train_Y)
 data_loader = Data.DataLoader(
     dataset = train_data,
-    batch_size = batch_size,
+    batch_size = BATCH_SIZE,
     shuffle = True,
 )
 
 
 #Define the Model
-model = PointerNetwork(input_size, weight_size, hidden_size, is_GRU=False)
+model = PointerNetwork(INPUT_SIZE, WEIGHT_SIZE, HIDDEN_SIZE, is_GRU=False)
 if torch.cuda.is_available():
     model.cuda()
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)

@@ -5,8 +5,7 @@ import torch.nn.functional as F
 def to_cuda(x):
     if torch.cuda.is_available():
         return x.cuda()
-    else:
-        return x
+    return x
 
 class PointerNetwork(nn.Module):
     def __init__(self, input_size, weight_size, hidden_size, is_GRU=False):
